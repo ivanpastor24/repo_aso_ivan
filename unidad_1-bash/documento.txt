@@ -1,4 +1,3 @@
-  
 acpi
 adduser.conf
 alsa
@@ -14,7 +13,6 @@ avahi
 bash.bashrc
 bash_completion
 bash_completion.d
-"Belén García" "Ctra. Las Colinas" "601004499"
 bindresvport.blacklist
 binfmt.d
 bluetooth
@@ -110,7 +108,6 @@ ipp-usb
 iproute2
 issue
 issue.net
-Iván Pastor | Ctra. Ribesalbes | 607886633
 java-11-openjdk
 kernel
 kernel-img.conf
@@ -118,7 +115,6 @@ kerneloops.conf
 keyutils
 krb5.conf
 krb5.conf.bac
-"Laura Calvo" | "Ctra. Las Palomas" | "605224411"
 ldap
 ld.so.cache
 ld.so.conf
@@ -193,7 +189,6 @@ papersize
 passwd
 passwd-
 pcmcia
-"Pepe Rodríguez" | "Ctra. Las Palmas" | "601449988"
 perl
 pki
 pm
@@ -230,8 +225,6 @@ rsyslog.conf
 rsyslog.d
 samba
 sane.d
-"Santiago Ramírez" | "Ctra. Los Caídos" | "607442211"
-"Sara Pómez" | "Ctra. Los Molinos" | "605998833"
 sasl2
 screenrc
 security
