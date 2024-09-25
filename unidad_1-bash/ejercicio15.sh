@@ -1,6 +1,6 @@
 #!/bin/bash
 
-read -p "Introduzca un número: " numero
+numero=$1
 
 for (( i=0; i<=10; i++ )); do
   resultado=$((numero*i))
