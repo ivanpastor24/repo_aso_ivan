@@ -27,7 +27,7 @@ for entrada in "$directorio"/*; do
      elif [[ -b $entrada ]]; then
        echo "La ruta $entrada es un archivo especial de bloque."
      elif [[ -c $entrada ]]; then
-       echo "La ruta $entrada es un archivo especial de carácter."
+       echo "La ruta $entrada es un archivo especial de caracter."
      else
        echo "La ruta $entrada es otro tipo de fichero."
    fi
