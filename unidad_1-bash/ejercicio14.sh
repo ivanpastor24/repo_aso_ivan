@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function uso() {
+uso() {
   echo "Error. La sintaxis correcta es: ./gestionusuarios.sh alta/baja nombre apellido1 apellido2 [grupo]"
 }
 
