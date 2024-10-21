@@ -16,10 +16,6 @@ menu() {
 
 introducir_registro() {
 
-  nombre="$1"
-  direccion="$2"
-  telefono="$3"
-
   echo "Introduzca el nombre: "
   read nombre
   echo "Introduzca la dirección: "

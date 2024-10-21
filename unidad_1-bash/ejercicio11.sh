@@ -2,6 +2,7 @@
 
 if [[ "$#" -ne 2 ]]; then
  echo "Error: No se han introducido correctamente los dos parámetros."
+ exit 1
 fi
 
 origen="$1"

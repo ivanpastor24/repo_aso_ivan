@@ -30,4 +30,6 @@ case $opcion in
           division=$(echo "scale=2; $num1 / $num2" | bc)
           echo $division
           ;;
+        *)
+          echo "La opción introducida es incorrecta."
 esac
