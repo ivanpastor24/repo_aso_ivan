@@ -14,9 +14,8 @@ foreach ($dep in $departamentos) {
 foreach ($emp in $empleados) {
          $grupo = $emp.departamento
          $usuario = "$($emp.nombre).$($emp.apellido)"
-
+         
          $nombre_completo = "$($emp.nombre) $($emp.apellido)"
-         $passwd = ConvertTo-SecureString "aso2025." -AsPlainText -Force
          
          New-ADUser -SamAccountName $usuario `
                     -UserPrincipalName "$usuario@empresa.local" `
@@ -24,9 +23,11 @@ foreach ($emp in $empleados) {
                     -Surname $emp.apellido `
                     -DisplayName $nombre_completo `
                     -Path "OU=$($emp.departamento),OU=Empresa,DC=EMPRESA,DC=LOCAL" `
-                    -AccountPassword $passwd `
+                    -AccountPassword ConvertTo-SecureString "aso2025." -AsPlainText -Force `
                     -Enabled $true `
                     -ChangePasswordAtLogon $true
-          
+         
          Add-ADGroupMember -Identity $grupo -Members $usuario
+         
+         Write-Host $usuario
 }
