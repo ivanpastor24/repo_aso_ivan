@@ -1,35 +1,40 @@
-﻿$ruta = "C:\Empresa\"
-$departamentos = @("FINANZAS","PERSONAL","PRODUCCION","VENTAS")
+﻿$ruta = "C:\Empresa"
 
-New-Item -Path $ruta -ItemType Directory
+$departamentos = "C:\Empresa\FINANZAS"
+$departamentos = "C:\Empresa\PERSONAL"
+$departamentos = "C:\Empresa\PRODUCCION"
+$departamentos = "C:\Empresa\VENTAS"
 
-foreach ($departamento in $departamentos) {
-   New-Item "$ruta\$departamento" -ItemType Directory -Force
-}
+New-Item -Path "$ruta" -ItemType Directory
 
-New-SmbShare -Name "Empresa" -Path $ruta -FullAccess Administradores -ReadAccess Todos -Force
+New-Item -Path "$ruta\$departamentos" -ItemType Directory
 
-foreach ($departamento in $departamentos) {
-   New-SmbShare -Name $departamento -Path "$ruta\$departamento" -FullAccess Administradores -ReadAccess Todos -Force
-}
+New-SmbShare -Path "$ruta" -Name 'Empresa' -FullAccess Administradores -ReadAccess Todos
 
 foreach ($departamento in $departamentos) {
-   $departamento = "$ruta\$departamento"
-   $acl_departamento = Get-Acl $departamento
+   $rutadep = "$ruta\$departamento"
+   
+   Write-Host $rutadep
+   
+   $acl_departamento = Get-Acl "$rutadep"
 
-   $permiso_modificar = @('$ruta\$departamento', 'Modify', 'Container.Inherit, ObjectInherit','$departamento', 'Allow')
+   $acl_departamento.SetAccessRuleProtection($true,$false)
+
+   $permiso_modificar = @("$rutadep", 'Modify', 'ContainerInherit, ObjectInherit', 'None', 'Allow')
 
    $ace_permiso_modificar = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permiso_modificar
 
-   $permiso_lectura = @('$ruta\$departamento', 'Read', 'Container.Inherit, ObjectInherit', 'Todos', 'Allow')
+   $permiso_lectura = @('Todos', 'Read', 'ContainerInherit, ObjectInherit', 'None', 'Allow')
 
    $ace_permiso_lectura = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permiso_lectura
 
-   $permiso_control_total = @('$ruta\$departamento', 'FullControl', 'Container.Inherit, ObjectInherit', 'Administradores', 'Allow')
+   $permiso_control_total = @('Administradores', 'FullControl', 'ContainerInherit, ObjectInherit', 'None', 'Allow')
 
    $ace_permiso_control_total = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permiso_control_total
 
-   $acl.SetAccessRule($ace_permiso_modificar, $ace_permiso_lectura, $ace_permiso_control_total)
+   $acl.SetAccessRule($ace_permiso_modificar)
+   $acl.SetAccessRule($ace_permiso_lectura)
+   $acl.SetAccessRule($ace_permiso_control_total)
 
-   $acl_departamento | Set-Acl -Path $ruta
+   $acl_departamento | Set-Acl -Path "$ruta"
 }
