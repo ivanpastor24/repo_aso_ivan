@@ -1,35 +1,41 @@
-﻿$ruta = "C:\Empresa\"
-$departamentos = @("FINANZAS","PERSONAL","PRODUCCION","VENTAS")
+﻿New-Item -Path 'C:\Empresa' -ItemType Directory
 
-New-Item -Path $ruta -ItemType Directory
+$departamentos = Import-Csv 'C:\Users\Administrador\Desktop\repo_aso_ivan\unidad_7-directorio_activo-powershell\archivos\departamentos.csv' -Delimiter ";"
 
-foreach ($departamento in $departamentos) {
-   New-Item "$ruta\$departamento" -ItemType Directory -Force
+foreach ($dep in $departamentos) {
+      New-Item -Path C:\Empresa\"$($dep.departamento)" -ItemType Directory
 }
 
-New-SmbShare -Name "Empresa" -Path $ruta -FullAccess Administradores -ReadAccess Todos -Force
+New-SmbShare -Path 'C:\Empresa' -Name 'Empresa' -FullAccess 'Administradores' -ReadAccess 'Usuarios del dominio'
 
-foreach ($departamento in $departamentos) {
-   New-SmbShare -Name $departamento -Path "$ruta\$departamento" -FullAccess Administradores -ReadAccess Todos -Force
-}
+foreach ($dep in $departamentos) {
+ $acl = Get-Acl -Path C:\Empresa\"$($dep.departamento)"
 
-foreach ($departamento in $departamentos) {
-   $departamento = "$ruta\$departamento"
-   $acl_departamento = Get-Acl $departamento
+ $acl.SetAccessRuleProtection($true, $false)
 
-   $permiso_modificar = @('$ruta\$departamento', 'Modify', 'Container.Inherit, ObjectInherit','$departamento', 'Allow')
+ $acl_permisos_control_total = 'Administradores', 'FullControl', 'ContainerInherit, ObjectInherit', 'None', 'Allow'
 
-   $ace_permiso_modificar = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permiso_modificar
+ $ace_permisos_control_total = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $acl_permisos_control_total
 
-   $permiso_lectura = @('$ruta\$departamento', 'Read', 'Container.Inherit, ObjectInherit', 'Todos', 'Allow')
+ $acl.SetAccessRule($ace_permisos_control_total)
 
-   $ace_permiso_lectura = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permiso_lectura
+ $ace_permisos_control_total | Format-Table
 
-   $permiso_control_total = @('$ruta\$departamento', 'FullControl', 'Container.Inherit, ObjectInherit', 'Administradores', 'Allow')
+ $acl_permisos_lectura = 'Usuarios del dominio', 'Read', 'ContainerInherit, ObjectInherit', 'None', 'Allow'
 
-   $ace_permiso_control_total = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permiso_control_total
+ $ace_permisos_lectura = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $acl_permisos_lectura
 
-   $acl.SetAccessRule($ace_permiso_modificar, $ace_permiso_lectura, $ace_permiso_control_total)
+ $acl.SetAccessRule($ace_permisos_lectura)
 
-   $acl_departamento | Set-Acl -Path $ruta
+ $ace_permisos_lectura | Format-Table
+
+ $acl_permisos_escritura = "$($dep.departamento)", 'Modify', 'ContainerInherit, ObjectInherit', 'None', 'Allow'
+
+ $ace_permisos_escritura = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $acl_permisos_escritura
+
+ $acl.SetAccessRule($ace_permisos_escritura)
+
+ $ace_permisos_escritura | Format-Table
+
+ $acl | Set-Acl -Path C:\Empresa\"$($dep.departamento)"
 }
