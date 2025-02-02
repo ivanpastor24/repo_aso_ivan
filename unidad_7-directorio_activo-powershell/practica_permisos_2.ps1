@@ -38,4 +38,4 @@ foreach ($dep in $departamentos) {
  $ace_permisos_escritura | Format-Table
 
  $acl | Set-Acl -Path C:\Empresa\"$($dep.departamento)"
- }
+}
