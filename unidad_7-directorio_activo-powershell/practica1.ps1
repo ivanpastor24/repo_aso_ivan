@@ -17,15 +17,15 @@ foreach ($emp in $empleados) {
          
          $nombre_completo = "$($emp.nombre) $($emp.apellido)"
          
-         New-ADUser -SamAccountName $usuario `
-                    -UserPrincipalName "$usuario@empresa.local" `
-                    -GivenName $em.nombre `
-                    -Surname $emp.apellido `
-                    -DisplayName $nombre_completo `
+         New-ADUser -Name $nombre_completo `
                     -Path "OU=$($emp.departamento),OU=Empresa,DC=EMPRESA,DC=LOCAL" `
-                    -AccountPassword ConvertTo-SecureString "aso2025." -AsPlainText -Force `
+                    -SamAccountName "$usuario" `
+                    -UserPrincipalName "$usuario@empresa.local" `
+                    -AccountPassword (ConvertTo-SecureString "aso2025." -AsPlainText -Force) `
+                    -GivenName $($emp.nombre) `
+                    -Surname $($emp.apellido) `
+                    -ChangePasswordAtLogon $true `
                     -Enabled $true `
-                    -ChangePasswordAtLogon $true
          
          Add-ADGroupMember -Identity $grupo -Members $usuario
          
