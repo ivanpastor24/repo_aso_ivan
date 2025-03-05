@@ -4,7 +4,7 @@ New-ADOrganizationalUnit -Name "IESELCAMINAS" -Path "DC=RECUPIVAN, DC=LOCAL" -De
 
 #Importo el fichero CSV "grupos" para que el sistema recorra la lista de elementos en busca de la información que queramos obtener
 
-$grupos = Import-Csv "C:\Users\Administrador\Desktop\CONVOCATORIA_EXTRAORDINARIA_MAYO\Ejercicios_repaso_powershell\grupos.csv" -Delimiter ","
+$grupos = Import-Csv "C:\Users\Administrador\Desktop\repo_aso_ivan\CONVOCATORIA_EXTRAORDINARIA_MAYO\Ejercicios_repaso_powershell\grupos.csv" -Delimiter ","
 
    #NOTA: uso el parámetro "-Delimiter" para cortar la parte de la cadena de texto perteneciente a los grupos
 
@@ -22,7 +22,7 @@ foreach($grupo in $grupos) {
 
 #Importo el fichero CSV "alumnos" para que el sistema recorra la lista de elementos en busca de la información que queramos obtener
 
-$alumnos = Import-Csv "C:\Users\Administrador\Desktop\CONVOCATORIA_EXTRAORDINARIA_MAYO\Ejercicios_repaso_powershell\alumnos(1).csv" -Delimiter ","
+$alumnos = Import-Csv "C:\Users\Administrador\Desktop\repo_aso_ivan\CONVOCATORIA_EXTRAORDINARIA_MAYO\Ejercicios_repaso_powershell\alumnos(1).csv" -Delimiter ","
  
  #NOTA: uso el parámetro "-Delimiter" para cortar la parte de la cadena de texto perteneciente al nombre de los alumnos
 
