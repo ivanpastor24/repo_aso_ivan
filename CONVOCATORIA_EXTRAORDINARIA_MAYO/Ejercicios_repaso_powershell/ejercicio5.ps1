@@ -6,7 +6,7 @@ New-Item -Path $ruta -ItemType Directory
 
 # Comparto la carpeta creada y asigno los permisos correspondientes mediantes ACLS.
 
-New-SmbShare -Path "C:\IESELCAMINAS" -Name "IESELCAMINAS" -FullAccess "Administrador" -Change "Todos"
+New-SmbShare -Path "C:\IESELCAMINAS" -Name "IESELCAMINAS" -FullAccess "Administrador" -Change "Usuarios del dominio"
 
 # Obtengo los permisos por defecto de la carpeta en cuestión.
 
@@ -28,11 +28,11 @@ $acl.SetAccessRule($permiso_control_total_administrador)
 
 $acl | Set-Acl -Path $ruta
 
-# Almaceno en la variable $permiso_lectura la regla de permisos 'Read' para todos los usuarios.
+# Almaceno en la variable $permiso_lectura la regla de permisos 'Read' para los usuarios del dominio.
 
-$permiso_lectura = @('Todos', 'Read', 'ContainerInherit, ObjectInherit', 'None', 'Allow')
+$permiso_lectura = @('Usuarios del dominio', 'Read', 'ContainerInherit, ObjectInherit', 'None', 'Allow')
 
-# Mediante la directiva 'New-Object' añado una nueva linea en donde indico que todos los usuarios tendrán acceso de solo lectura al recurso compartido IESELCAMINAS.
+# Mediante la directiva 'New-Object' añado una nueva linea en donde indico que los usuarios del dominio tendrán acceso de solo lectura al recurso compartido IESELCAMINAS.
 
 $ace= New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permiso_lectura
 
@@ -94,10 +94,6 @@ foreach ($grupo in $grupos) {
          # Aplico esta configuración.
 
          $acl | Set-Acl -Path $path
-
-         # Comparto la carpeta IESELCAMINAS para que se pueda acceder a ella a través de la red.
-
-         Set-ADGroup -Identity $($grupo.nombre) -GroupScope Global
 }
 
 # Creo la carpeta IESELCAMINAS_USERS en la raíz del sistema.
@@ -108,7 +104,7 @@ New-Item -Path $ruta_users -ItemType Directory
 
 # Comparto la carpeta creada y asigno los permisos correspondientes mediantes ACLS.
 
-New-SmbShare -Path "C:\IESELCAMINAS_USERS" -Name "IESELCAMINAS_USERS" -FullAccess "Administrador" -Change "Todos"
+New-SmbShare -Path "C:\IESELCAMINAS_USERS" -Name "IESELCAMINAS_USERS$" -FullAccess "Administrador" -Change "Usuarios del dominio"
 
 # Obtengo los permisos por defecto de la carpeta en cuestión.
 
@@ -130,11 +126,11 @@ $acl.SetAccessRule($permiso_control_total_administrador)
 
 $acl | Set-Acl -Path $ruta_users
 
-# Almaceno en la variable $permiso_lectura la regla de permisos 'Read' para todos los alumnos.
+# Almaceno en la variable $permiso_lectura la regla de permisos 'Read' para los usuarios del dominio.
 
-$permiso_lectura = @('Todos', 'Read', 'ContainerInherit, ObjectInherit', 'None', 'Allow')
+$permiso_lectura = @('Usuarios del dominio', 'Read', 'ContainerInherit, ObjectInherit', 'None', 'Allow')
 
-# Mediante la directiva 'New-Object' añado una nueva linea en donde indico que todos los alumnos tendrán acceso de solo lectura al recurso compartido IESELCAMINAS_USERS.
+# Mediante la directiva 'New-Object' añado una nueva linea en donde indico que los usuarios del dominio tendrán acceso de solo lectura al recurso compartido IESELCAMINAS_USERS.
 
 $ace= New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permiso_lectura
 
@@ -196,8 +192,4 @@ foreach ($alumno in $alumnos) {
          # Aplico esta configuración.
 
          $acl | Set-Acl -Path $path_users
-
-         # Comparto la carpeta IESELCAMINAS_USERS para que se pueda acceder a ella a través de la red.
-
-         Set-ADUser -Identity "$($alumno.nombre).$($alumno.apellidos)" -ScriptPath "carpetas.bat" -HomeDrive "Z:" -HomeDirectory "\\DC-RECUPIVAN\IESELCAMINAS_USERS$\$($alumno.nombre).$($alumno.apellidos)"
 }
