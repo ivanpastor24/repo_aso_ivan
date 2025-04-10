@@ -7,8 +7,5 @@ Set-ADGroup -Identity $($grupo.nombre) -GroupScope Global
 $alumnos = Import-Csv "C:\Users\Administrador\Desktop\repo_aso_ivan\CONVOCATORIA_EXTRAORDINARIA_MAYO\Ejercicios_repaso_powershell\alumnos(1).csv" -Delimiter ","
 
 foreach ($alumno in $alumnos) {
-
-         # Comparto la carpeta IESELCAMINAS_USERS para que se pueda acceder a ella a través de la red.
-
          Set-ADUser -Identity "$($alumno.nombre).$($alumno.apellidos)" -ScriptPath "carpetas.bat" -HomeDrive "X:" -HomeDirectory "\\DC-RECUPIVAN\IESELCAMINAS_USERS$\$($alumno.nombre).$($alumno.apellidos)"
 }
